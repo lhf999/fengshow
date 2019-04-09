@@ -34,7 +34,11 @@
                         <i class="fa fa-lock fa-lg"></i>
                         <input class="form-control required" type="password" placeholder="确认密码" id="passwordtwo" name="passwordtwo" maxlength="8"/>
                     </div>
-                    <div  class="tncode" style="text-align: center;height: 50px ;width: 250px;background: #0c5460;margin-left:-15px;margin-top: 40px" id="verify"></div>
+                    <div class="form-group" id="embed-submit">
+                        <div id="embed-captcha" style="overflow:hidden"></div>
+                        <p id="wait" class="show" style="color: #9acfea">正在加载验证码......</p>
+                        <p id="notice" class="hide">请先完成验证</p>
+                    </div>
                     <div class="form-group">
                         <div class="form-group col-md-offset-9" style="margin-top: 20px;">
                             <button type="submit" class="btn btn-success pull-right" id="reg_submit" disabled >注册</button>
@@ -47,6 +51,44 @@
 </div>
 </body>
 <script type="text/javascript">
+    var handlerEmbed = function (captchaObj) {
+        $("#embed-submit").click(function (e) {
+            var validate = captchaObj.getValidate();
+            if (!validate) {
+                $("#notice")[0].className = "show";
+                setTimeout(function () {
+                    $("#notice")[0].className = "hide";
+                }, 2000);
+                e.preventDefault();
+            }
+        });
+        // 将验证码加到id为captcha的元素里，同时会有三个input的值：geetest_challenge, geetest_validate, geetest_seccode
+        captchaObj.appendTo("#embed-captcha");
+        captchaObj.onReady(function () {
+            $("#wait")[0].className = "hide";
+        }).onSuccess(function(){
+            $("#reg_submit").removeAttr('disabled')
+        });
+    };
+    $.ajax({
+        // 获取id，challenge，success（是否启用failback）
+        url: "https://www.huifengshow.top/gtcode/web/StartCaptchaServlet.php?t=" + (new Date()).getTime(), // 加随机数防止缓存
+        type: "get",
+        dataType: "json",
+        success: function (data) {
+            // 使用initGeetest接口
+            // 参数1：配置参数
+            // 参数2：回调，回调的第一个参数验证码对象，之后可以使用它做appendTo之类的事件
+            initGeetest({
+                gt: data.gt,
+                challenge: data.challenge,
+                new_captcha: data.new_captcha,
+                product: "embed", // 产品形式，包括：float，embed，popup。注意只对PC版验证码有效
+                offline: !data.success // 表示用户后台检测极验服务器是否宕机，一般不需要关注
+                // 更多配置参数请参见：http://www.geetest.com/install/sections/idx-client-sdk.html#config
+            }, handlerEmbed);
+        }
+    });
     $("input").blur(function(){
         var value = $(this).val();
         if(value == ''){
