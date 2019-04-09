@@ -36,17 +36,17 @@ class UserController extends Controller
     public function doLogin(){
         $model = new User();
         $data = $model->doLogin();
-        /*if($data === true){
+        if($data === true){
             return redirect()->intended();
         }else{
             return view('www.user.login',['error' => $data['message']]);
-        }*/
+        }
 
-        if($data){
+        /*if($data == true){
             return redirect()->intended();
         }else{
             return back()->withInput();
-        }
+        }*/
     }
 
     public function outLogin(Request $request){

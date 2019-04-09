@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>注册</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <!--bootstrap基本样式-->
     <script src="{{url('/')}}/static/www/js/vendor/jquery-1.11.2.min.js"></script>
     <link href="{{url('/')}}/static/www/css/bootstrap.min.css" rel="stylesheet">
     <script src="{{url('/')}}/static/www/js/vendor/bootstrap.min.js"></script>
     <link rel="stylesheet" href="{{url('/')}}/static/www/css/login.css">
-    <script type="text/javascript" src="{{url('/')}}/code/tn_code.js?v=35"></script>
-    <script type="text/javascript" src="{{url('/')}}/js/jquery.base64.js"></script>
-    <link rel="stylesheet" type="text/css" href="{{url('/')}}/code/style.css?v=27" />
+    {{--验证码--}}
+    <script src="{{url('/')}}/static/www/js/code/jquery.js"></script>
+    <script src="{{url('/')}}/static/www/js/code/gt.js"></script>
 </head>
 <body>
 <div class="container">

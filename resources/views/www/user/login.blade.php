@@ -20,6 +20,7 @@
         <div class="form-horizontal col-md-offset-3" id="login_form">
             <h3 class="form-title">LOGIN</h3>
             <form action="dologin" method="post" autocomplete="off">
+                <meta name="csrf-token" content="{{ csrf_token() }}" />
                 @csrf
                 @if(!empty($error))
                     <P style="color: red">{{$error}}</P>
@@ -59,6 +60,7 @@
     })
 </script>
 <script>
+    $("#reg_submit").removeAttr('disabled')
     var handlerEmbed = function (captchaObj) {
         $("#embed-submit").click(function (e) {
             var validate = captchaObj.getValidate();

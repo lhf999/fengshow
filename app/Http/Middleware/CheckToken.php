@@ -14,6 +14,7 @@ class CheckToken
         'user/dologin',
         'user/outlogin',
         'user/sendmessage',
+        'user/addmember',
         '/all',
         '/insert',
         '/admin',
